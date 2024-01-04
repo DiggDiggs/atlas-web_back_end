@@ -1,12 +1,13 @@
 #!/usr/bin/env python3
-""" Function with type annotations """
+""" Type-annotated function """
+
 
 from typing import List, Union
 
-def compute_sum_of_mixed_elements(elements: List[Union[int, float]]) -> float:
-    """ Computes and returns the sum of integers and floats in the provided list """
-    result_sum = 0.0
-    for element in elements:
-        result_sum += element
-    return result_sum
 
+def sum_mixed_list(mxd_list: List[Union[int, float]]) -> float:
+    """ Returns the sum of all ints and floats from passed list """
+    sum_ = 0.0
+    for item in mxd_list:
+        sum_ += item
+    return sum_
