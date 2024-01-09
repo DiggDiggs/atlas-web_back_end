@@ -12,7 +12,7 @@ class FIFOCache(BaseCaching):
     """
     -You must use <self.cache_data>: dict from the parent class BaseCaching
 
-    -You can overload def __init__(self): 
+    -You can overload def __init__(self):
     but don’t forget to call the parent init: super().__init__()
     """
 
@@ -28,7 +28,7 @@ class FIFOCache(BaseCaching):
 
         -If key or item is None, dont do anything.
 
-        -If the number of items in self.cache_data is higher than 
+        -If the number of items in self.cache_data is higher than
         BaseCaching.MAX_ITEMS, you must get ride of the first item
         put in cache (FIFO algorithm), and you must print DISCARD:
         with the key discarded
