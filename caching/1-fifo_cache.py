@@ -7,6 +7,12 @@ that inherits from BaseCaching.
 from base_caching import BaseCaching
 
 class FIFOCache(BaseCaching):
+    """
+    -try to use the <self.cache_data>: dict from the parent class BaseCaching
+
+    -You can overload def __init__(self):
+    but don’t forget to call the parent init: super().__init__()
+    """
 
     def __init__(self):
         super().__init__()
