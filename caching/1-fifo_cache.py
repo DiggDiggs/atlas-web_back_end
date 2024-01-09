@@ -15,7 +15,7 @@ class FIFOCache(BaseCaching):
     -You can overload def __init__(self): 
     but don’t forget to call the parent init: super().__init__()
     """
-    
+
     def __init__(self):
         """
         -Overload inherited init
@@ -33,27 +33,27 @@ class FIFOCache(BaseCaching):
         put in cache (FIFO algorithm), and you must print DISCARD:
         with the key discarded
         """
-        
+
         if key is None or item is None:
             return
-        
+
         self.cache_data[key] = item
-        
+
         if len(self.cache_data) > BaseCaching.MAX_ITEMS:
             discarded_key = list(self.cache_data.keys())[0]
             del self.cache_data[discarded_key]
-            
+
             print("DISCARD: {}".format(discarded_key))
 
     def get(self, key):
         """
         -Returns the value in self.cache_data linked to key.
-        
+
         -If key is None or if the key doesn’t exist in self.cache_data,
         return None.
         """
-        
+
         if key is None or key not in self.cache_data:
             return None
-        
+
         return self.cache_data[key]
