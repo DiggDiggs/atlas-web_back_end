@@ -1,5 +1,5 @@
 """
-Create a class LIFOCache that inherits from BaseCaching 
+Create a class LIFOCache that inherits from BaseCaching
 and is a LIFO caching system
 """
 
