@@ -49,12 +49,12 @@ class MRUCache(BaseCaching):
     def get(self, key):
         """
         -Returns the value in self.cache_data linked to key.
-        
+
         -If key is None or if the key doesn’t exist in self.cache_data,
         return None.
         """
         if key is None or key not in self.cache_data:
             return None
-        
+
         self.cache_data.move_to_end(key)
         return self.cache_data[key]
