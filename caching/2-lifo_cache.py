@@ -40,7 +40,7 @@ class LIFOCache(BaseCaching):
         if len(self.cache_data) > BaseCaching.MAX_ITEMS:
             oldest_key = list(self.cache_data)[0]
             print("DISCARD:", oldest_key)
-            del self.cache_data[oldest_key]
+            del self.cache_data[key]
 
     def get(self, key):
         """
