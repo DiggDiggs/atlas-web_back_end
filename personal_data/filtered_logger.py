@@ -7,30 +7,32 @@ import re
 import os
 import mysql.connector
 
-PII_FIELDS = ("name", "email", "phone", "address", "ssn", "password")
+PII_FIELDS = ("name", "email", "phone", "ssn", "password")
 
 
 def filter_datum(fields: List[str], redaction: str,
                  message: str, separator: str) -> str:
-    """Redact sensitive fields in log message"""
-    for field in PII_FIELDS:
-        message = re.sub(rf"{field}=.*?{separator}",
+    """returns the log message obfuscated"""
+    for field in fields:
+        message = re.sub(f"{field}=.*?{separator}",
                          f"{field}={redaction}{separator}", message)
     return message
+
+
 class RedactingFormatter(logging.Formatter):
-    """ Redacting Formatter class """
+    """ Redacting Formatter class that inherits from logging.Formatter """
 
     REDACTION = "***"
     FORMAT = "[HOLBERTON] %(name)s %(levelname)s %(asctime)-15s: %(message)s"
     SEPARATOR = ";"
 
     def __init__(self, fields: List[str]):
-        """ Constructor """
+        """ constructor method for RedactingFormatter class"""
         super(RedactingFormatter, self).__init__(self.FORMAT)
         self.fields = fields
 
     def format(self, record: logging.LogRecord) -> str:
-        """ Filter values in incoming log records """
+        """ filter values in incoming log records using filter_datum"""
         original_message = record.getMessage()
         redacted_message = filter_datum(
             self.fields,
@@ -47,56 +49,60 @@ def get_logger() -> logging.Logger:
     logger.setLevel(logging.INFO)
     logger.propagate = False
     handler = logging.StreamHandler()
-    formatter = RedactingFormatter(list(PII_FIELDS))
-    handler.setFormatter(formatter)
+    handler.setFormatter(RedactingFormatter(PII_FIELDS))
     logger.addHandler(handler)
     return logger
 
 
 def get_db() -> mysql.connector.connection.MySQLConnection:
-    """Connects to the MySQL database and returns a connection object."""
+    """
+    Connects to the database named <holberton> to read the <users> table
 
-    return mysql.connector.connect(
-        user=os.getenv('PERSONAL_DATA_DB_USERNAME', 'root'),
-        password=os.getenv('PERSONAL_DATA_DB_PASSWORD', ''),
-        host=os.getenv('PERSONAL_DATA_DB_HOST', 'localhost'),
-        database=os.getenv('PERSONAL_DATA_DB_NAME')
-    )
-    
-    
+    Uses <os> module to obtain credentials from environment
+
+    Uses <mysql-connector-python> to connect to MySQL Database
+
+    Args:
+        None
+
+    Returns:
+        mysql.connector.connection.MySQLConnection: connection to <holberton>
+    """
+    user = os.environ.get("PERSONAL_DATA_DB_USERNAME")
+    password = os.environ.get("PERSONAL_DATA_DB_PASSWORD")
+    host = os.environ.get("PERSONAL_DATA_DB_HOST")
+    database = os.environ.get("PERSONAL_DATA_DB_NAME")
+    return mysql.connector.connect(user=user, password=password, host=host,
+                                   database=database)
+
+
 def main():
-    """read and filter data from database"""
+    """
+    Obtains a database connection using get_db() and retrieves all rows in the
+    <users> table.
+
+    Displays each row under a filtered format using get_logger() and
+    <PII_FIELDS> to filter the fields.
+
+    Args:
+        None
+
+    Returns:
+        None
+    """
     logger = get_logger()
     db = get_db()
-    cursor = db.cursor()
-    cursor.execute("SELECT * FROM users;")
-    
-    # Check if there are any rows returned
-    if cursor.rowcount > 0:
-        
-        # Loop through each row
-        for row in cursor:
-        
-            # Create a dictionary from the row data
-            dict_row = {
-                'name': row[0],
-                'email': row[1],
-                'phone': row[2],
-                'ssn': row[3],
-                'password': row[4],
-                'ip': row[5],
-                'last_login': row[6],
-                'user_agent': row[7]
-            }
-            
-            # Join the dictionary items into a log message
-            message = '; '.join([f'{key}={value}' for key, value in dict_row.items()])
-            
-            # Log the message
-            logger.info(message)
-        
-    cursor.close()
+    cursor = db.cursor(dictionary=True)
+    cursor.execute("SELECT * FROM users")
+    for row in cursor:
+        # Instantiate list of tuples of <row>'s key/pair values
+        tuple_list = row.items()
+        # Convert to string of key/value pairs with separator
+        str_row = '; '.join(f"{tuple[0]}={tuple[1]}" for tuple in tuple_list)
+        # Pass string to logger to log in specified format
+        logger.info(str_row)
     db.close()
-    
-if __name__ == '__main__':
+
+
+if __name__ == "__main__":
     main()
