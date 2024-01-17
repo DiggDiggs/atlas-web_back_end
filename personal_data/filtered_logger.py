@@ -77,7 +77,10 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
 
 
 def main():
-    """<users> table. row under a filtered format using get_logger() and <PII_FIELDS> Args:None Returns: None"""
+    """
+    <users> table. row under a filtered format using get_logger()
+    and <PII_FIELDS> Args:None Returns: None
+    """
 
     logger = get_logger()
     db = get_db()
