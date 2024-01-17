@@ -17,7 +17,6 @@ def filter_datum(fields: List[str], redaction: str,
         message = re.sub(rf"{field}=.*?{separator}",
                          f"{field}={redaction}{separator}", message)
     return message
-
 class RedactingFormatter(logging.Formatter):
     """ Redacting Formatter class """
 
@@ -63,21 +62,21 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
         host=os.getenv('PERSONAL_DATA_DB_HOST', 'localhost'),
         database=os.getenv('PERSONAL_DATA_DB_NAME')
     )
-
-
+    
+    
 def main():
     """read and filter data from database"""
     logger = get_logger()
     db = get_db()
     cursor = db.cursor()
     cursor.execute("SELECT * FROM users;")
-
+    
     # Check if there are any rows returned
     if cursor.rowcount > 0:
-
+        
         # Loop through each row
         for row in cursor:
-
+        
             # Create a dictionary from the row data
             dict_row = {
                 'name': row[0],
@@ -89,18 +88,15 @@ def main():
                 'last_login': row[6],
                 'user_agent': row[7]
             }
-
+            
             # Join the dictionary items into a log message
             message = '; '.join([f'{key}={value}' for key, value in dict_row.items()])
-
+            
             # Log the message
             logger.info(message)
-
+        
     cursor.close()
     db.close()
-
+    
 if __name__ == '__main__':
     main()
-
-print("filter_datum worked as expected:", filter_datum(["name"], "****", "name=John Doe;email=john@doe.com", ";") == "name=****;email=john@doe.com")
-print("filter_datum worked as expected:", filter_datum(["name"], "****", "name=John Doe;email=john@doe.com", ";") == "name=****;email=john@doe.com")
