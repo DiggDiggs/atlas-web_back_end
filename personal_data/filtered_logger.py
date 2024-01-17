@@ -77,10 +77,7 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
 
 
 def main():
-    """
-    database connection using get_db()
-    and retrieves all rows in the
-    <users> table.
+    """<users> table.
 
     row under a filtered
     format using get_logger() and
@@ -90,8 +87,8 @@ def main():
         None
 
     Returns:
-        None
-    """
+        None"""
+    
     logger = get_logger()
     db = get_db()
     cursor = db.cursor(dictionary=True)
