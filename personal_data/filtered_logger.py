@@ -100,3 +100,6 @@ def main():
     
 if __name__ == '__main__':
     main()
+
+print("filter_datum worked as expected:", filter_datum(["name"], "****", "name=John Doe;email=john@doe.com", ";") == "name=****;email=john@doe.com")
+print("filter_datum worked as expected:", filter_datum(["name"], "****", "name=John Doe;email=john@doe.com", ";") == "name=****;email=john@doe.com")
