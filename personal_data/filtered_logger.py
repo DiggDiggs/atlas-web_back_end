@@ -78,13 +78,13 @@ def get_db() -> mysql.connector.connection.MySQLConnection:
 
 def main():
     """
-    Obtains a database connection using get_db()
+    database connection using get_db()
     and retrieves all rows in the
     <users> table.
 
-    Displays each row under a filtered
+    row under a filtered
     format using get_logger() and
-    <PII_FIELDS> to filter the fields.
+    <PII_FIELDS>
 
     Args:
         None
