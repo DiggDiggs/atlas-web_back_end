@@ -1,19 +1,16 @@
 #!/usr/bin/env python3
-
-"""create a class to manage the API authentication
-"""
-
+"""This class is the template
+for all authentication system
+you will implement."""
 from flask import request
 from typing import List, TypeVar
+import os
 
 
 class Auth:
-    """Auth class to manage the API authentication
-    """
-
+    """class to manage the API authentication"""
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
-        """require_auth
-        """
+        """returns false"""
         if path is None or excluded_paths is None or excluded_paths == []:
             return True
         if path[-1] != '/':
@@ -23,15 +20,21 @@ class Auth:
         return True
 
     def authorization_header(self, request=None) -> str:
-        """authorization_header
-        """
+        """returns none"""
         if request is None:
             return None
         if 'Authorization' not in request.headers:
             return None
-        return request.headers['Authorization']
+        else:
+            return request.headers['Authorization']
 
-    def current_user(self) -> TypeVar('User'):
-        """current_user
-        """
+    def current_user(self, request=None) -> TypeVar('User'):
+        """returns none"""
         return None
+
+    def session_cookie(self, request=None):
+        """returns a cookie value from a request"""
+        if request is None:
+            return None
+        _my_session_id = request.cookies.get(os.getenv('SESSION_NAME'))
+        return _my_session_id
