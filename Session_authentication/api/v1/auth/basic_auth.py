@@ -1,79 +1,97 @@
 #!/usr/bin/env python3
-"""We will update this later"""
-from api.v1.auth.auth import Auth
-import base64
-from typing import TypeVar
-from models.user import User
+"""
+Manage API authentication
+"""
+from flask import request
+from typing import List, TypeVar
+from os import getenv
 
 
-class BasicAuth(Auth):
-    """Basic auth class"""
-    def extract_base64_authorization_header(self,
-                                            authorization_header: str) -> str:
-        """returns the Base64 part of the Authorization
-        header for a Basic Authentication"""
-        if authorization_header is None:
-            return None
-        if not isinstance(authorization_header, str):
-            return None
-        if not authorization_header.startswith('Basic '):
-            return None
-        return authorization_header[6:]
+SESSION_NAME = getenv("SESSION_NAME")
 
-    def decode_base64_authorization_header(
-            self, base64_authorization_header: str) -> str:
-        """returns the decoded value of a Base64
-        string base64_authorization_header"""
-        if base64_authorization_header is None:
-            return None
-        if not isinstance(base64_authorization_header, str):
-            return None
-        try:
-            return base64.b64decode(base64_authorization_header)\
-                .decode('utf-8')
-        except(base64.binascii.Error, UnicodeDecodeError):
-            return None
 
-    def extract_user_credentials(
-            self, decoded_base64_authorization_header: str) -> (str, str):
-        """returns the user email and password
-        from the Base64 decoded value"""
-        if decoded_base64_authorization_header is None:
-            return None, None
-        if not isinstance(decoded_base64_authorization_header, str):
-            return None, None
-        if ':' not in decoded_base64_authorization_header:
-            return None, None
-        user_email, user_password =\
-            decoded_base64_authorization_header.split(':', 1)
-        return user_email, user_password
+class Auth():
+    """
+    Manage Api Authentication
+    """
+    def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
+        """"
+        Method that returns True if the <path> is not in the list of strings
+        <excluded_paths>.
 
-    def user_object_from_credentials(
-            self, user_email: str, user_pwd: str) -> TypeVar('User'):
-        """returns the User instance based
-        on his email and password"""
-        if user_email is None or type(user_email) is not str:
-            return None
-        if user_pwd is None or type(user_pwd) is not str:
-            return None
-        try:
-            users = User.search({'email': user_email})
-        except Exception:
-            return None
-        for user in users:
-            if user.is_valid_password(user_pwd):
-                return user
-        return None
+        You can assume <excluded_paths> contains string path always ending
+        with a '/'.
 
-    def current_user(self, request=None) -> TypeVar('User'):
-        """overloads Auth and retrieves
-        the User instance for a request"""
+        This method is slash intolerant. For example, if <path> is '/v1/auth'
+        and <excluded_paths> is ['/v1/auth/', '/v1/auths/'], then this method
+        will return False.
+
+        Args:
+            path(str): The path to check against <excluded_paths>
+            excluded_paths(List[str]): The list of paths to check against
+
+        Additional Returns:
+            True if <path> is None
+            True if <path> is None
+            True if <excluded_paths> is None or empty
+            False if <path> is in <excluded_paths>
+        """
+        if excluded_paths is None or not len(excluded_paths) or path is None:
+            return True
+        if path in excluded_paths or path + '/' in excluded_paths:
+            return False
+        return True
+
+    def authorization_header(self, request=None) -> str:
+        """
+        HTTP header authorization
+
+        Args:
+            request(Flask.request): The request object
+            asdasd
+
+        Returns:
+            If <request> is None, returns None.
+            If <request> doesn't contain the header key <'Authorization'>,
+            returns None.
+            Otherwise, returns the value of the header key <'Authorization'>.
+        """
         if request is None:
             return None
-        authorized_header = self.authorization_header(request)
-        b64_head = self.extract_base64_authorization_header(authorized_header)
-        dc_head = self.decode_base64_authorization_header(b64_head)
-        user_email, user_pwd = self.extract_user_credentials(dc_head)
-        user = self.user_object_from_credentials(user_email, user_pwd)
+        if not request.headers.get('Authorization'):
+            return None
+        return request.headers.get('Authorization')
 
-        return user
+    def current_user(self, request=None) -> TypeVar('User'):
+        """
+        Args:
+            request(Flask.request): The request object
+
+        Returns:
+            None
+
+        """
+        return None
+
+    def session_cookie(self, request=None):
+        """
+        Returns a cookie value from a request
+
+        Uses .get_cookies() to get the cookies from <request>
+
+        Uses env variable <SESSION_NAME> to define the name of the cookie
+            used for the session ID
+
+        Args:
+            request (obj): The request object
+
+        Returns:
+           None if <request> is None
+           The value of the cookie named <_my_session_id> from <request> -
+                the name of the cookie must be defined by the env variable
+                    <SESSION_NAME>
+        """
+        if request is None:
+            return None
+        my_cookie = request.cookies.get(SESSION_NAME)
+        return my_cookie
