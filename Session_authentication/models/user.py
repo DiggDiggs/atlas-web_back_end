@@ -36,6 +36,7 @@ class User(Base):
     def is_valid_password(self, pwd: str) -> bool:
         """ Validate a password
         """
+        print("checking password")
         if pwd is None or type(pwd) is not str:
             return False
         if self.password is None:
