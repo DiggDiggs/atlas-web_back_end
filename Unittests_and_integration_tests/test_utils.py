@@ -58,5 +58,7 @@ class TestGetJson(TestCase):
         with mock.patch('requests.get', return_value=mock.Mock(
                 json=lambda: test_payload)):
             self.assertEqual(get_json(test_url), test_payload)
+
+            
 class TestMemoize(unittest.TestCase):
     """ This is a class that holds methods for testing the utils.memoize """
