@@ -8,3 +8,8 @@ from unittest.mock import patch
 from unittest import mock
 from parameterized import parameterized
 from utils import memoize
+
+class TestAccessNestedMap(TestCase):
+    """
+        Test access to nested map method
+    """
