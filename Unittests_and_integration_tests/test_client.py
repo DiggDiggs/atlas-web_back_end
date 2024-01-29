@@ -29,3 +29,6 @@ class TestGithubOrgClient(unittest.TestCase):
         self.assertEqual(client_return, mock_get_json.return_value)
 
         def test_public_repos_url(self):
+            """
+            test GithubOrgClient.public
+            """
