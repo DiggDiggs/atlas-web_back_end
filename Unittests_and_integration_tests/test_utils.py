@@ -67,3 +67,7 @@ class TestMemoize(unittest.TestCase):
         """ This method tests utils.memoize """
         class TestClass:
             """ This class holds a method of memoization """
+
+            def a_method(self):
+                """ This is the mock method """
+                return 42
