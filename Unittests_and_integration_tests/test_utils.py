@@ -71,3 +71,7 @@ class TestMemoize(unittest.TestCase):
             def a_method(self):
                 """ This is the mock method """
                 return 42
+
+            @memoize
+            def a_property(self):
+                """ This is the mock property with mock method's value """
