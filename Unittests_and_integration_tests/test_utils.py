@@ -30,3 +30,8 @@ class TestAccessNestedMap(TestCase):
         ({"a": 1}, ("a", "b")),
     ])
     def test_access_nested_map_exception(self, map, path):
+        """
+        Test access to nested map method
+        """
+        from utils import access_nested_map
+        self.assertRaises(KeyError, access_nested_map, map, path)
