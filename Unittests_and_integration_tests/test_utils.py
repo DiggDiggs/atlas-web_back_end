@@ -46,15 +46,17 @@ class TestGetJson(TestCase):
         ("http://holberton.io", {"payload": False}),
     ])
     def test_get_json(self, test_url, test_payload):
-         """
+        """
         Use unittest.mock.patch to patch requests.get
-        Makes sure it returns a <Mock> obj with a <json> method
+        Makes sure it returns a <Mock> obj with a <json> method 
         that returns <test_payload> which you parameterize alongside the
         <test_url> that will pass to <get_json> with the parameterized inputs:
         """
-         from utils import get_json
+        from utils import get_json
         import requests
         from unittest import mock
         with mock.patch('requests.get', return_value=mock.Mock(
                 json=lambda: test_payload)):
             self.assertEqual(get_json(test_url), test_payload)
+class TestMemoize(unittest.TestCase):
+    """ This is a class that holds methods for testing the utils.memoize """
