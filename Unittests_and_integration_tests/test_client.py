@@ -32,3 +32,7 @@ class TestGithubOrgClient(unittest.TestCase):
             """
             test GithubOrgClient.public
             """
+            with patch.object(GithubOrgClient,
+                          "org",
+                          new_callable=PropertyMock,
+                          return_value={"repos_url": "holberton"}) as mock_org:
