@@ -11,3 +11,7 @@ from urllib.error import HTTPError
 from fixtures import *
 
 
+class TestGithubOrgClient(unittest.TestCase):
+    """
+    test client
+    """
