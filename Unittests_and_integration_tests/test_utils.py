@@ -52,3 +52,9 @@ class TestGetJson(TestCase):
         that returns <test_payload> which you parameterize alongside the
         <test_url> that will pass to <get_json> with the parameterized inputs:
         """
+         from utils import get_json
+        import requests
+        from unittest import mock
+        with mock.patch('requests.get', return_value=mock.Mock(
+                json=lambda: test_payload)):
+            self.assertEqual(get_json(test_url), test_payload)
