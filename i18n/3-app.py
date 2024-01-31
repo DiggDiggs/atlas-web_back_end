@@ -21,3 +21,9 @@ gettext.__doc__ = "getit."
 
 
 class Config():
+    """
+    Configure Babel.
+    """
+    LANGUAGES = ['en', 'fr']
+    BABEL_DEFAULT_LOCALE = 'en'
+    BABEL_DEFAULT_TIMEZONE = 'UTC'
