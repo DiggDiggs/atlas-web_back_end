@@ -33,3 +33,25 @@ gettext(u'home_header')
 
 @babel.localeselector
 def get_locale():
+    """
+    Determine locale from request.
+    
+    Checks if request contains locale parameter with supported 
+    locale value, returns it if so. Otherwise returns default locale.
+    """
+    locale = request.args.get('locale')
+    if locale and locale in Config.LANGUAGES:
+        return locale
+    return request.accept_languages.best_match(Config.LANGUAGES)
+
+
+@app.route('/')
+def index():
+    """
+    Return the index page.
+    """
+    return render_template('4-index.html')
+
+
+if __name__ == '__main__':
+    app.run()
