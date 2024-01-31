@@ -12,3 +12,6 @@ babel = Babel(app)
 
 
 class Config():
+    """
+    Configure Babel.
+    """
