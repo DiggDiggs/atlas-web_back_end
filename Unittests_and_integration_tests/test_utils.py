@@ -9,6 +9,7 @@ from unittest import mock
 from parameterized import parameterized
 from utils import memoize
 
+
 class TestAccessNestedMap(TestCase):
     """
         Test access to nested map method
@@ -48,7 +49,7 @@ class TestGetJson(TestCase):
     def test_get_json(self, test_url, test_payload):
         """
         Use unittest.mock.patch to patch requests.get
-        Makes sure it returns a <Mock> obj with a <json> method 
+        Makes sure it returns a <Mock> obj with a <json> method
         that returns <test_payload> which you parameterize alongside the
         <test_url> that will pass to <get_json> with the parameterized inputs:
         """
@@ -59,7 +60,7 @@ class TestGetJson(TestCase):
                 json=lambda: test_payload)):
             self.assertEqual(get_json(test_url), test_payload)
 
-            
+
 class TestMemoize(unittest.TestCase):
     """ This is a class that holds methods for testing the utils.memoize """
 
@@ -76,12 +77,12 @@ class TestMemoize(unittest.TestCase):
             def a_property(self):
                 """ This is the mock property with mock method's value """
                 return self.a_method()
-        
         with mock.patch.object(TestClass, 'a_method') as fn:
             tc = TestClass()
             tc.a_property
             tc.a_property
             fn.assert_called_once()
+
 
 if __name__ == '__main__':
     unittest.main()
