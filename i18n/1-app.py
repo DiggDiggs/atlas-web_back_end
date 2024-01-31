@@ -28,3 +28,8 @@ app.config.from_object(Config)
 
 
 @app.route('/')
+def index():
+    """
+    Return the index page.
+    """
+    return render_template('1-index.html'), 200
