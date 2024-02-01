@@ -33,8 +33,8 @@ def get_locale():
     """
     Get locale from the request.
 
-    Detects if the incoming request contains the <locale> argument and if its value
-    is a supported locale, returns it. If not or if the parameter is not
+    Detects if the incoming request contains the <locale>
+    is a supported locale, returns it.
     present, resort to the default locale.
     """
     locale = request.args.get('locale')
