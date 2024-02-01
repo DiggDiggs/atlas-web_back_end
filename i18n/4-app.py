@@ -34,10 +34,11 @@ gettext(u'home_header')
 @babel.localeselector
 def get_locale():
     """
-    Determine locale from request.
-    
-    Checks if request contains locale parameter with supported 
-    locale value, returns it if so. Otherwise returns default locale.
+    Get locale from request.
+
+    Detects if incoming request contains <locale> argument and if it's value
+    is a supported locale, returns it. If not or if the parameter is not
+    present, resort to default locale.
     """
     locale = request.args.get('locale')
     if locale and locale in Config.LANGUAGES:
