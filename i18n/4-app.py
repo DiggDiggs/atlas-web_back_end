@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
 """
-Basic babel flask app.
+Basic Babel Flask app.
 
-Uses Config to set Babel's default local <en>
-and timezone <UTC>
+Uses Babel's Config to set the default locale to <en> and timezone to <UTC>.
 
-Uses that class as config for flask app.
+Uses the Babel class as config for the Flask app.
 """
 from flask import Flask, render_template, request
 from flask_babel import Babel, gettext
@@ -14,36 +13,34 @@ from flask_babel import Babel, gettext
 app = Flask(__name__)
 babel = Babel(app)
 gettext.__doc__ = "Nice one, checker."
-""" Parameterize templates using message IDS """
+""" Parameterize templates using message IDs """
 
 
-class Config():
+class BabelConfig():
     """
-    Configure Babel.
+    Configure Babel for the Flask app.
     """
     LANGUAGES = ['en', 'fr']
     BABEL_DEFAULT_LOCALE = 'en'
     BABEL_DEFAULT_TIMEZONE = 'UTC'
 
 
-app.config.from_object(Config)
-gettext(u'home_title')
-gettext(u'home_header')
+app.config.from_object(BabelConfig)
 
 
 @babel.localeselector
 def get_locale():
     """
-    Get locale from request.
+    Get locale from the request.
 
-    Detects if incoming request contains <locale> argument and if it's value
+    Detects if the incoming request contains the <locale> argument and if its value
     is a supported locale, returns it. If not or if the parameter is not
-    present, resort to default locale.
+    present, resort to the default locale.
     """
     locale = request.args.get('locale')
-    if locale and locale in Config.LANGUAGES:
+    if locale and locale in BabelConfig.LANGUAGES:
         return locale
-    return request.accept_languages.best_match(Config.LANGUAGES)
+    return request.accept_languages.best_match(BabelConfig.LANGUAGES)
 
 
 @app.route('/')
