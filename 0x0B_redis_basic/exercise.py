@@ -21,3 +21,11 @@ def call_history(method: Callable) -> Callable:
         self._redis.rpush(f"{key}:outputs", str(output))
         return output
     return wrapper
+
+def count_calls(method: Callable) -> Callable:
+    """
+    Counts how many times a Cache() method is called.
+
+    a key, gets an uses the qualified name of <method> using the
+    __qualname__ dunder method.
+    """
