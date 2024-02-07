@@ -29,3 +29,12 @@ def count_calls(method: Callable) -> Callable:
     a key, gets an uses the qualified name of <method> using the
     __qualname__ dunder method.
     """
+    @wraps(method)
+    def wrapper(self, *args, **kwargs):
+        """
+       Uses increment the number of times the method has been called.
+        """
+        key = method.__qualname__
+        self._redis.incr(key)
+        return method(self, *args, **kwargs)
+    return wrapper
