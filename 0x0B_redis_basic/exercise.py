@@ -6,3 +6,8 @@ import redis
 import uuid
 from typing import Union, Callable
 from functools import wraps
+def call_history(method: Callable) -> Callable:
+    """
+    looks at and writes the input and output of a Cache() method.
+    """
+    @wraps(method)
